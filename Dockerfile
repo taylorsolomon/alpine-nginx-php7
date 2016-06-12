@@ -1,5 +1,5 @@
-FROM bytepark/alpine-nginx:latest
-MAINTAINER Sebastian Knoth <sk@bytepark.de>
+FROM interactivestrategies/alpine-nginx:latest
+MAINTAINER Taylor Solomon <taylor.solomon@me.com>
 
 # Add PHP 7
 RUN apk upgrade -U && \
@@ -21,7 +21,7 @@ RUN apk upgrade -U && \
 
 COPY /rootfs /
 
-# Small fixes
+# Symlink php services to useful names
 RUN ln -s /etc/php7 /etc/php && \
     ln -s /usr/bin/php7 /usr/bin/php && \
     ln -s /usr/sbin/php-fpm7 /usr/bin/php-fpm && \
@@ -33,7 +33,7 @@ RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
 # ADD SOURCE
-ONBUILD COPY ./src /usr/share/nginx/html
-ONBUILD RUN chown -Rf nginx:nginx /usr/share/nginx/html
+ONBUILD COPY ./src /var/www
+ONBUILD RUN chown -Rf nginx:nginx /var/www
 
 ENTRYPOINT ["/init"]
